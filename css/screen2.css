@@ -1,0 +1,43 @@
+﻿*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+    width: 100%;
+    background-color: black;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+}
+
+div {
+	width: 100%;
+    background-color: black;
+    border: none;
+    padding: 0.5em;
+    text-align: center;
+    clear: both;
+    -moz-transform: matrix(-1, 0, 0, 1, 0, 0);
+    -webkit-transform: matrix(-1, 0, 0, 1, 0, 0);
+    -o-transform:matrix(-1, 0, 0, 1, 0, 0);
+}
+div#time_left {
+    color: greenyellow;
+    height: 70%;
+	  width: 100%;
+    font-size: 25vw;
+    padding: 3%;
+}
+div#message_show {
+    color: orange;
+    height: 30%;
+	  width: 100%;
+    padding: 3%;
+    font-size: 5vw;
+    line-height: 1.35;
+}

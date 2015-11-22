@@ -1,0 +1,113 @@
+﻿
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+::-webkit-input-placeholder {color:darkgrey;}
+::-moz-placeholder          {color:darkgrey;}/* Firefox 19+ */
+:-moz-placeholder           {color:darkgrey;}/* Firefox 18- */
+:-ms-input-placeholder      {color:darkgrey;}
+
+html, body {
+	height: 400px;
+    width: 300px;
+    background-color: green;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border-color: lightgray;
+    border: 1px solid;
+    vertical-align: middle;
+}
+footer {
+    margin: 0;
+    background-color: black;
+    color: black;
+    overflow: hidden;
+    padding: 0.5em;
+    font-size: 0.6em;
+    clear: both;
+}
+
+input,
+button {
+    display: inline-block;
+    height: calc(12% - 3px);
+    border: solid 1px black;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 2px;
+    margin-bottom: 0;
+    font-size: 0.8em;
+    text-align: center;
+    cursor: default;
+}
+input:before,
+button:before {
+    content:'';
+    height: 12%;
+    display: inline-block;
+}
+button.start_stop {
+    width: calc(50% - 3px);
+}
+button#up,
+input#time,
+button#deadline_start {
+    margin-right: 0;
+}
+
+input#time,
+button#deadline_start {
+    width: calc(70% - 3px);
+}
+button#screen2,
+button#reset {
+    width: calc(30% - 3px);
+}
+button:hover,
+input:hover {
+    cursor: pointer;
+}
+
+textarea {
+    display: block;
+    width: calc(100% - 4px);
+    height: 15%;
+    border: solid 1px black;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 2px;
+    font-size: 0.8em;
+    overflow: hidden;
+    resize: none;
+    clear: both;
+}
+
+div {
+	width: calc(100% - 4px);
+    background-color: black;
+    border: solid 1px black;
+    border-radius: 0;
+    margin: 0;
+    text-align: center;
+    clear: both;
+}
+div#time_left {
+    height: 25%;
+    width: 100%;
+    line-height: 1.1;
+    font-size: 3em;
+    color: greenyellow;
+    padding: 20px;
+}
+div#message_show {
+    height: 15%;
+	width: 100%;
+    line-height: 1.35;
+    font-size: 0.8em;
+    color: orange;
+    padding: 3px;
+}
