@@ -29,15 +29,17 @@ div {
 div#time_left {
     color: greenyellow;
     height: 70%;
-	  width: 100%;
+	width: 100%;
     font-size: 25vw;
     padding: 3%;
+    line-height: 40vw;
 }
 div#message_show {
-    color: orange;
+    color: yellow;
     height: 30%;
-	  width: 100%;
+	width: 100%;
     padding: 3%;
     font-size: 5vw;
     line-height: 1.35;
+    letter-spacing: 0.07em;
 }

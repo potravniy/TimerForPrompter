@@ -14,12 +14,11 @@
 html, body {
 	height: 400px;
     width: 300px;
-    background-color: green;
+    background-color: black;
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     border-color: lightgray;
-    border: 1px solid;
-    vertical-align: middle;
+    border: none;
 }
 footer {
     margin: 0;
@@ -27,12 +26,12 @@ footer {
     color: black;
     overflow: hidden;
     padding: 0.5em;
-    font-size: 0.6em;
-    clear: both;
+    font-size: 0.4em;
 }
 
 input,
 button {
+    vertical-align: middle;
     display: inline-block;
     height: calc(12% - 3px);
     border: solid 1px black;
@@ -40,15 +39,12 @@ button {
     padding: 3px;
     margin: 2px;
     margin-bottom: 0;
-    font-size: 0.8em;
+    font-size: 1em;
     text-align: center;
     cursor: default;
 }
-input:before,
-button:before {
-    content:'';
-    height: 12%;
-    display: inline-block;
+input {
+    font-size: 2.5em;
 }
 button.start_stop {
     width: calc(50% - 3px);
@@ -67,9 +63,15 @@ button#screen2,
 button#reset {
     width: calc(30% - 3px);
 }
-button:hover,
-input:hover {
+button:hover {
     cursor: pointer;
+}
+input:hover {
+    cursor: text;
+}
+input#time,
+button#screen2 {
+    height: calc(18% - 4px);
 }
 
 textarea {
@@ -80,7 +82,7 @@ textarea {
     border-radius: 4px;
     padding: 3px;
     margin: 2px;
-    font-size: 0.8em;
+    font-size: 1.2em;
     overflow: hidden;
     resize: none;
     clear: both;
@@ -108,6 +110,6 @@ div#message_show {
 	width: 100%;
     line-height: 1.35;
     font-size: 0.8em;
-    color: orange;
+    color: yellow;
     padding: 3px;
 }

@@ -1,5 +1,7 @@
-module.exports = function ($input) {
-    var timeString = ($input.value ? $input.value : 0);
+module.exports = function (timeString) {
+    if(!timeString){
+        timeString = (Prompter.$inputAndDisplayTime.value ? Prompter.$inputAndDisplayTime.value : 0);
+    }
     var result = {
         value: NaN,
         isValid: false
@@ -8,10 +10,10 @@ module.exports = function ($input) {
         var validChars = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ":"];
         var timeNumber = 0;
         for (var i = 0; i < timeString.length; i++) {
-            var areValid = validChars.some(function (item) {
+            var isCharValid = validChars.some(function (item) {
                 return timeString[i] == item;
             })
-            if (!areValid) {
+            if (!isCharValid) {
                 alert("Допустимо вводить только цифры и двоеточия.");
                 return result
             }
@@ -35,7 +37,6 @@ module.exports = function ($input) {
         return result
     }
     var timeInSeconds = hours * 3600 + minutes * 60 + seconds;
-    $input.value = require("./convertTimeFromSecondsToString")(timeInSeconds);
     return result = {
         value: timeInSeconds,
         isValid: true

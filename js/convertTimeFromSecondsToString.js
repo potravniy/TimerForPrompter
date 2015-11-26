@@ -1,12 +1,16 @@
-module.exports = function (timeInSeconds) {
+module.exports = function (timeInSeconds, fullFormat) {
     var h = Math.floor(timeInSeconds / (3600));
     var m = Math.floor((timeInSeconds - h * 3600) / 60);
     var s = Math.floor(timeInSeconds - h * 3600 - m * 60);
-    var timeString = "";
-    if (h > 0) {
-        timeString = h + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-    } else {
-        timeString = m + ":" + (s < 10 ? "0" + s : s);
+    var timeString = ":" + (s < 10 ? "0" + s : s);
+    if(fullFormat){
+        timeString = (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + timeString;
+    }else {
+        if (h > 0) {
+            timeString = h + ":" + (m < 10 ? "0" + m : m) + timeString;
+        } else {
+            timeString = m + timeString;
+        }
     }
     return timeString;
 }
