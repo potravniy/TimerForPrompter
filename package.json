@@ -1,0 +1,16 @@
+{
+  "name": "TimerForPrompter",
+  "version": "2.0",
+  "author": "Viacheslav Potravnyi",
+  "description": "Application for TV studio prompters.",
+  "dependencies": {
+    "none": "none"
+  },
+  "devDependencies": {
+    "browserify": "latest"
+  },
+  "scripts": {
+    "build-js": "browserify js/main.js > js/browserifyed.js",
+    "watch-js": "watchify js/main.js -o js/browserifyed.js -v"
+  }
+}
