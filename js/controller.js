@@ -7,7 +7,7 @@ var Controller = function () {
 	this._buttonClickProcessing = function (event) {
 		var input = parseInput();
 		if(!input.isValid) throw "Wrong input.";
-		switch (event.srcElement) {
+		switch (event.target || event.srcElement) {
 			case Prompter.$buttonCountUp :
 				if(!that._timer){
 					that._timer = new Timer("countUp", input.value);

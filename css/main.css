@@ -12,13 +12,16 @@
 :-ms-input-placeholder      {color:darkgrey;}
 
 html, body {
-	height: 400px;
-    width: 300px;
-    background-color: black;
+    background-color: green;
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     border-color: lightgray;
     border: none;
+}
+body {
+    height: 400px;
+    width: 300px;
+    background-color: black;
 }
 footer {
     margin: 0;

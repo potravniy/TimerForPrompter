@@ -1,96 +1,90 @@
 var convertToString = require("./convertTimeFromSecondsToString.js");
+var emit = require("./emitEvent");
 
 var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 	var that = this;
-	this.timerValue = enteredTimeInSeconds;
-	this.emit = require("./emitEvent");
+	this.emit = emit;
 	this.type = typeOfTimer;
 	switch (typeOfTimer){
 		case "countUp":
-			this.countUp = function (){
+			this.timerValue = 0;
+			this.deadline = enteredTimeInSeconds;
+			this.timeLeft = function (){
 				that.timerValue++;
-				that.emit('timerChanged', customEventInit(that.timerValue));
-			};
-			Prompter.$body.addEventListener('newSecond', that.countUp);
+				that.emit('timerChanged', customDetail());
+				if(that.timerValue === that.deadline && that.deadline) {
+					that.pause();
+					that.emit('timeOver', customDetail());
+				}
+			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.countUp);
+				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
-				that.emit('timerPaused', customEventInit(that.timerValue));
+				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.countUp);
+				Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
-				that.emit('timerRun', customEventInit(that.timerValue));
+				that.emit('timerRun', customDetail());
 			}
-			this.cancel = function(){
-				Prompter.$body.removeEventListener('newSecond', that.countUp);
-				that.emit('timerCancelled', {detail: {type: "countUp"}});
-			}
-			this.emit('timerStarted', customEventInit(that.timerValue));
 			break
 		case "countDown":
-			this.countDown = function (){
+			this.timerValue = enteredTimeInSeconds;
+			this.deadline = 0;
+			this.timeLeft = function (){
 				that.timerValue--;
-				that.emit('timerChanged', customEventInit(that.timerValue));
+				that.emit('timerChanged', customDetail());
 				if(that.timerValue === 0) {
 					that.pause();
-					that.emit('timeOver', customEventInit(that.timerValue));
+					that.emit('timeOver', customDetail());
 				}
-			};
-			Prompter.$body.addEventListener('newSecond', that.countDown);
+			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.countDown);
+				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
-				that.emit('timerPaused', customEventInit(that.timerValue));
+				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.countDown);
+				Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
-				that.emit('timerRun', customEventInit(that.timerValue));
+				that.emit('timerRun', customDetail());
 			}
-			this.cancel = function(){
-				Prompter.$body.removeEventListener('newSecond', that.countDown);
-				that.emit('timerCancelled', customEventInit(that.timerValue));
-			}
-			this.emit('timerStarted', customEventInit(that.timerValue));
 			break
 		case "deadline":
 			var enteredTime = convertToString(enteredTimeInSeconds, true);
-			var eventInit = {
-				detail: {
-					type: typeOfTimer,
-					time: enteredTime
-				}
+			this.deadline = new Date();
+			this.deadline.setHours(+enteredTime.substring(0, 2));
+			this.deadline.setMinutes(+enteredTime.substring(3, 5));
+			this.deadline.setSeconds(+enteredTime.substring(6));
+			if (this.deadline < new Date()) {
+				this.deadline.setDate(this.deadline.getDate() + 1);
 			}
-			this.emit('timerStarted', eventInit);
-			this.timerValue = new Date();
-			this.timerValue.setHours(+enteredTime.substring(0, 2));
-			this.timerValue.setMinutes(+enteredTime.substring(3, 5));
-			this.timerValue.setSeconds(+enteredTime.substring(6));
-			if (this.timerValue < new Date()) {
-				this.timerValue.setDate(this.timerValue.getDate() + 1);
+			this.deadline.fromDateToString = function() {
+				return (that.deadline.getHours() + ':' + that.deadline.getMinutes() + ':' + that.deadline.getSeconds());
 			}
-			console.log("this.timerValue: " + this.timerValue + ", new Date(): " + (new Date()));
+			this.timerValue = Math.floor((this.deadline - new Date()) / 1000);
 			this.timeLeft = function () {
-				var leftSeconds = Math.floor((that.timerValue - new Date()) / 1000);
-				that.emit('timerChanged', customEventInit(leftSeconds));
-				if (leftSeconds === 0){
+				that.timerValue = Math.floor((that.deadline - new Date()) / 1000);
+				that.emit('timerChanged', customDetail());
+				if (that.timerValue === 0){
 					Prompter.$body.removeEventListener('newSecond', that.timeLeft);
-					that.emit('timeOver', customEventInit(leftSeconds));
-				};
-			}
-			Prompter.$body.addEventListener('newSecond', that.timeLeft);
-			this.cancel = function(){
-				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
-				that.emit('timerCancelled', customEventInit(that.timerValue));
+					that.emit('timeOver', customDetail());
+				}
 			}
 			break
 	}
-	function customEventInit(time) {
+	this.cancel = function(){
+		Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+		that.emit('timerCancelled', customDetail());
+	}
+	this.emit('timerStarted', customDetail());
+	Prompter.$body.addEventListener('newSecond', that.timeLeft);
+	function customDetail() {
 		return {
 			detail: {
 				type: typeOfTimer,
-				time: convertToString(time)
+				time: convertToString(that.timerValue),
+				deadline: (typeOfTimer === "deadline") ? that.deadline.fromDateToString() : convertToString(that.deadline)
 			}
 		}	
 	} 
