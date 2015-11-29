@@ -50,10 +50,16 @@ Esc только очищает поле ввода.
 - Переместить окно суфлера на второй монитор, нажать F11 для Fullscreen режима.
 
 Совместимость
+
 Google Chrome 	+
+
 Mozilla Firefox +
+
 Opera 	        +
+
 IE11            -     Custom Events не поддерживается
+
 Edge            -     Fullscreen не поддерживается
+
 
 Посмотреть как работает можно здесь http://potravniy.github.io/
