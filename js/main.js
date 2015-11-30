@@ -11,7 +11,7 @@ window.onload = function () {
         $inputMessage: document.querySelector("textarea#message"),
         $showTimeLeft: document.querySelector("div#time_left"),
         $showMessage: document.querySelector("div#message_show")
-    }
+    };
     require('./secondsEventEmitter.js');
     var controller = new Controller();
     var view = new View();

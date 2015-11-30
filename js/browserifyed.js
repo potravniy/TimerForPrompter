@@ -142,7 +142,7 @@ window.onload = function () {
         $inputMessage: document.querySelector("textarea#message"),
         $showTimeLeft: document.querySelector("div#time_left"),
         $showMessage: document.querySelector("div#message_show")
-    }
+    };
     require('./secondsEventEmitter.js');
     var controller = new Controller();
     var view = new View();
@@ -303,6 +303,7 @@ function emitEventEverySecond() {
 
 
 },{"./emitEvent":4}],11:[function(require,module,exports){
+/* global Prompter */
 var parseInput = require('./parseInput');
 var toStr = require('./convertTimeFromSecondsToString.js');
 var fontSize = require("./fontSize.js");
@@ -347,17 +348,18 @@ var View = function () {
 				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
 				Prompter.$buttonCountUp.style["background-color"] = "#0f0";
 				Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пауза";
-				that._showTimeOnPrompter(event);
+				that._showTimeOnPrompter(event, true);
 				break
 			case "countDown":
 				Prompter.$inputAndDisplayTime.value = event.detail.time;
 				Prompter.$buttonCountDown.style["background-color"] = "#0f0";
 				Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пауза";
-				that._showTimeOnPrompter(event);
+				that._showTimeOnPrompter(event, true);
 				break
 			case "deadline":
 				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
 				Prompter.$buttonCountDeadline.style["background-color"] = "#0f0";
+				that._showTimeOnPrompter(event, true);
 				break
 		}
 	}
@@ -439,10 +441,14 @@ var View = function () {
 	this._prompterWindowCloseFunc = function () {
 	    if (that._prompterWindow) that._closePrompterWindow();
 	}
-	this._showTimeOnPrompter = function(event){
+	this._showTimeOnPrompter = function(event, withoutColorFormat){
 		if (that._$timeOnPrompter) {
             that._$timeOnPrompter.style['font-size'] = fontSize(event) + 'vw';
-			that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = fontColor(event);
+			if(withoutColorFormat){
+				that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = "";
+			} else {
+				that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = fontColor(event);
+			}
 			that._$timeOnPrompter.textContent = Prompter.$showTimeLeft.textContent = event.detail.time;
 		}
 		else {
