@@ -8,7 +8,7 @@ var Controller = function () {
 		var input = parseInput();
 		if(!input.isValid) throw "Wrong input.";
 		switch (event.target || event.srcElement) {
-			case Prompter.$buttonCountUp :
+			case window.Prompter.$buttonCountUp :
 				if(!that._timer){
 					that._timer = new Timer("countUp", input.value);
 				} else if (that._timer.type === "countUp" && !that._timer.paused) {
@@ -17,7 +17,7 @@ var Controller = function () {
 					that._timer.run();
 				}
 				break
-			case Prompter.$buttonCountDown :
+			case window.Prompter.$buttonCountDown :
 				if(!that._timer){
 					that._timer = new Timer("countDown", input.value);
 				} else if (that._timer.type === "countDown" && !that._timer.paused) {
@@ -26,18 +26,18 @@ var Controller = function () {
 					that._timer.run();
 				}
 				break
-			case Prompter.$buttonCountDeadline :
+			case window.Prompter.$buttonCountDeadline :
 				if(!that._timer){
 					that._timer = new Timer("deadline", input.value);
 				}
 				break
-			case Prompter.$buttonReset :
+			case window.Prompter.$buttonReset :
 				if (that._timer) that._timer.cancel();
 				that._timer = null;
 				break
 		}
 	}
-	Prompter.$body.addEventListener("click", that._buttonClickProcessing);
+	window.Prompter.$body.addEventListener("click", that._buttonClickProcessing);
 }
 
 module.exports = Controller;

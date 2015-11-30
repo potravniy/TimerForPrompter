@@ -9,7 +9,7 @@ var Controller = function () {
 		var input = parseInput();
 		if(!input.isValid) throw "Wrong input.";
 		switch (event.target || event.srcElement) {
-			case Prompter.$buttonCountUp :
+			case window.Prompter.$buttonCountUp :
 				if(!that._timer){
 					that._timer = new Timer("countUp", input.value);
 				} else if (that._timer.type === "countUp" && !that._timer.paused) {
@@ -18,7 +18,7 @@ var Controller = function () {
 					that._timer.run();
 				}
 				break
-			case Prompter.$buttonCountDown :
+			case window.Prompter.$buttonCountDown :
 				if(!that._timer){
 					that._timer = new Timer("countDown", input.value);
 				} else if (that._timer.type === "countDown" && !that._timer.paused) {
@@ -27,18 +27,18 @@ var Controller = function () {
 					that._timer.run();
 				}
 				break
-			case Prompter.$buttonCountDeadline :
+			case window.Prompter.$buttonCountDeadline :
 				if(!that._timer){
 					that._timer = new Timer("deadline", input.value);
 				}
 				break
-			case Prompter.$buttonReset :
+			case window.Prompter.$buttonReset :
 				if (that._timer) that._timer.cancel();
 				that._timer = null;
 				break
 		}
 	}
-	Prompter.$body.addEventListener("click", that._buttonClickProcessing);
+	window.Prompter.$body.addEventListener("click", that._buttonClickProcessing);
 }
 
 module.exports = Controller;
@@ -168,12 +168,12 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				}
 			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
 				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
 				that.emit('timerRun', customDetail());
 			}
@@ -190,12 +190,12 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				}
 			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
 				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
 				that.emit('timerRun', customDetail());
 			}
@@ -217,18 +217,18 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				that.timerValue = Math.floor((that.deadline - new Date()) / 1000);
 				that.emit('timerChanged', customDetail());
 				if (that.timerValue === 0){
-					Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+					window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 					that.emit('timeOver', customDetail());
 				}
 			}
 			break
 	}
 	this.cancel = function(){
-		Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+		window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 		that.emit('timerCancelled', customDetail());
 	}
 	this.emit('timerStarted', customDetail());
-	Prompter.$body.addEventListener('newSecond', that.timeLeft);
+	window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 	function customDetail() {
 		return {
 			detail: {

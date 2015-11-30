@@ -18,12 +18,12 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				}
 			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
 				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
 				that.emit('timerRun', customDetail());
 			}
@@ -40,12 +40,12 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				}
 			}
 			this.pause = function(){
-				Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 				that.paused = true;
 				that.emit('timerPaused', customDetail());
 			}
 			this.run = function(){
-				Prompter.$body.addEventListener('newSecond', that.timeLeft);
+				window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 				that.paused = false;
 				that.emit('timerRun', customDetail());
 			}
@@ -67,18 +67,18 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				that.timerValue = Math.floor((that.deadline - new Date()) / 1000);
 				that.emit('timerChanged', customDetail());
 				if (that.timerValue === 0){
-					Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+					window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 					that.emit('timeOver', customDetail());
 				}
 			}
 			break
 	}
 	this.cancel = function(){
-		Prompter.$body.removeEventListener('newSecond', that.timeLeft);
+		window.Prompter.$body.removeEventListener('newSecond', that.timeLeft);
 		that.emit('timerCancelled', customDetail());
 	}
 	this.emit('timerStarted', customDetail());
-	Prompter.$body.addEventListener('newSecond', that.timeLeft);
+	window.Prompter.$body.addEventListener('newSecond', that.timeLeft);
 	function customDetail() {
 		return {
 			detail: {
