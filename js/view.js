@@ -9,7 +9,7 @@ var View = function () {
 	var that = this;
 	this._prompterWindow = undefined;
 	this._$timeOnPrompter = null;
-	this._$messageOnPrompter = null;
+	window.Prompter.View.$messageDivSecondDispl = null;
 	this._$prompterWindowButtonOnOff = document.querySelector("button#screen2");
 	Prompter.$showMessage.textContent = "Нет окна суфлера";
 
@@ -22,7 +22,7 @@ var View = function () {
 	    }
 	}
 	this._processMessage = function () {
-	    if (that._$messageOnPrompter) {
+	    if (window.Prompter.View.$messageDivSecondDispl) {
 	        that._showMessage();
 	    } else {
 	    	that._openPrompterWindow();
@@ -30,12 +30,9 @@ var View = function () {
 	    }
 	}
 	this._showMessage = function () {
-	        that._$messageOnPrompter.textContent = Prompter.$showMessage.textContent = Prompter.$inputMessage.value;
+	        window.Prompter.View.$messageDivSecondDispl.textContent = Prompter.$showMessage.textContent = Prompter.$inputMessage.value;
 	        Prompter.$inputMessage.value = "";
-	        cutContentToFitDiv(that._$messageOnPrompter);
-	}
-	this._cutContentToFitDivFunc = function(){
-		cutContentToFitDiv(that._$messageOnPrompter);	
+	        cutContentToFitDiv();
 	}
 	this._timerStarted = function(event) {
 		switch (event.detail.type) {
@@ -110,12 +107,12 @@ var View = function () {
 	    if(!that._prompterWindow) return;
 	    that._prompterWindow.addEventListener('load', function () {
 	        that._$timeOnPrompter = that._prompterWindow.document.querySelector("div#time_left");
-	        that._$messageOnPrompter = that._prompterWindow.document.querySelector("div#message_show");
+	        window.Prompter.View.$messageDivSecondDispl = that._prompterWindow.document.querySelector("div#message_show");
 	        that._$prompterWindowButtonOnOff.innerHTML = "Закрыть<br>второе<br>окно";
 	        that._showMessage();
 		    window.addEventListener('unload', that._prompterWindowCloseFunc);
 	        that._prompterWindow.addEventListener('unload', that._closePrompterWindow);
-	        that._prompterWindow.addEventListener('resize', that._cutContentToFitDivFunc);
+	        that._prompterWindow.addEventListener('resize', that.cutContentToFitDiv);
 	    });
 	}
 	this._closePrompterWindow = function() {
@@ -125,7 +122,7 @@ var View = function () {
 	    that._prompterWindow.close();
 		that._prompterWindow = undefined;
 		that._$timeOnPrompter = null;
-		that._$messageOnPrompter = null;
+		window.Prompter.View.$messageDivSecondDispl = null;
     	that._$prompterWindowButtonOnOff.innerHTML = "Создать<br>второе<br>окно";
     	Prompter.$showMessage.textContent = "Нет окна суфлера";
 	}

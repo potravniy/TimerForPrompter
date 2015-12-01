@@ -10,7 +10,8 @@ window.onload = function () {
         $buttonReset: document.querySelector("button#reset"),
         $inputMessage: document.querySelector("textarea#message"),
         $showTimeLeft: document.querySelector("div#time_left"),
-        $showMessage: document.querySelector("div#message_show")
+        $showMessage: document.querySelector("div#message_show"),
+        View: {}
     };
     require('./secondsEventEmitter.js');
     var controller = new Controller();

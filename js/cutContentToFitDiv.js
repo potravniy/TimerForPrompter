@@ -1,21 +1,21 @@
-module.exports = function ($messageDivSecondDispl) {
-	var temp = $messageDivSecondDispl.textContent;
-	$messageDivSecondDispl.textContent = "";
+module.exports = function () {
+	var temp = window.Prompter.View.$messageDivSecondDispl.textContent;
+	window.Prompter.View.$messageDivSecondDispl.textContent = "";
 	var scrollHeight,
 		toggle = true;
 	var id = setInterval(cutContentToFitDiv, 4);
 	function cutContentToFitDiv() {
-		if (!scrollHeight) scrollHeight = $messageDivSecondDispl.scrollHeight;
+		if (!scrollHeight) scrollHeight = window.Prompter.View.$messageDivSecondDispl.scrollHeight;
 		if(toggle){
-			$messageDivSecondDispl.textContent = temp;
+			window.Prompter.View.$messageDivSecondDispl.textContent = temp;
 			toggle = false;
 		} else {
-			if($messageDivSecondDispl.scrollHeight > scrollHeight){
-				temp = $messageDivSecondDispl.textContent.slice(0, -1);
+			if(window.Prompter.View.$messageDivSecondDispl.scrollHeight > scrollHeight){
+				temp = window.Prompter.View.$messageDivSecondDispl.textContent.slice(0, -1);
 				toggle = true;
 			} else {
 				clearInterval(id);
-				Prompter.$showMessage.textContent = temp;
+				window.Prompter.$showMessage.textContent = temp;
 			}
 		}
 	}
