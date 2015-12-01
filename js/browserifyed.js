@@ -130,9 +130,7 @@ module.exports = function (event) {
 }
 },{}],7:[function(require,module,exports){
 window.onload = function () {
-	var Controller = require('./controller.js');
-	var View = require("./view.js");
-    window.Prompter = {
+   window.Prompter = {
         $body: document.querySelector("body"),
         $buttonCountUp: document.querySelector("button#up"),
         $buttonCountDown: document.querySelector("button#down"),
@@ -144,6 +142,8 @@ window.onload = function () {
         $showMessage: document.querySelector("div#message_show"),
         View: {}
     };
+	var Controller = require('./controller.js');
+	var View = require("./view.js");
     require('./secondsEventEmitter.js');
     var controller = new Controller();
     var view = new View();

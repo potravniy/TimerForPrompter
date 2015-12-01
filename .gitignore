@@ -3,6 +3,7 @@
 
 # Local folders
 /node_modules/
+/.vscode/
 
 # Windows image file caches
 Thumbs.db

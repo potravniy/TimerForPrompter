@@ -1,11 +1,18 @@
 {
   "name": "TimerForPrompter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Viacheslav Potravnyi",
   "description": "Application for TV studio prompters.",
-  "dependencies": {
-    "none": "none"
+  "keywords": [
+    "prompter",
+    "timer"
+  ],
+  "repository" :{
+    "type" : "git"
+    , "url" : "https://github.com/potravniy/TimerForPrompter.git"
   },
+  "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "browserify": "latest"
   },
