@@ -179,7 +179,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 			}
 			break
 		case "countDown":
-			this.timerValue = enteredTimeInSeconds;
+			this.timerValue = (enteredTimeInSeconds) ? enteredTimeInSeconds : 3599;
 			this.deadline = 0;
 			this.timeLeft = function (){
 				that.timerValue--;
@@ -304,7 +304,7 @@ function emitEventEverySecond() {
 
 },{"./emitEvent":4}],11:[function(require,module,exports){
 /* global Prompter */
-var parseInput = require('./parseInput');
+var parseInput = require('./parseInput.js');
 var toStr = require('./convertTimeFromSecondsToString.js');
 var fontSize = require("./fontSize.js");
 var fontColor = require("./fontColor.js");
@@ -348,18 +348,18 @@ var View = function () {
 				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
 				Prompter.$buttonCountUp.style["background-color"] = "#0f0";
 				Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пауза";
-				that._showTimeOnPrompter(event, true);
+				that._showTimeOnPrompter(event);
 				break
 			case "countDown":
 				Prompter.$inputAndDisplayTime.value = event.detail.time;
 				Prompter.$buttonCountDown.style["background-color"] = "#0f0";
 				Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пауза";
-				that._showTimeOnPrompter(event, true);
+				that._showTimeOnPrompter(event);
 				break
 			case "deadline":
 				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
 				Prompter.$buttonCountDeadline.style["background-color"] = "#0f0";
-				that._showTimeOnPrompter(event, true);
+				that._showTimeOnPrompter(event);
 				break
 		}
 	}
@@ -441,14 +441,10 @@ var View = function () {
 	this._prompterWindowCloseFunc = function () {
 	    if (that._prompterWindow) that._closePrompterWindow();
 	}
-	this._showTimeOnPrompter = function(event, withoutColorFormat){
+	this._showTimeOnPrompter = function(event){
 		if (that._$timeOnPrompter) {
             that._$timeOnPrompter.style['font-size'] = fontSize(event) + 'vw';
-			if(withoutColorFormat){
-				that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = "";
-			} else {
-				that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = fontColor(event);
-			}
+			that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = fontColor(event);
 			that._$timeOnPrompter.textContent = Prompter.$showTimeLeft.textContent = event.detail.time;
 		}
 		else {
@@ -472,4 +468,4 @@ var View = function () {
 }
 
 module.exports = View;
-},{"./convertTimeFromSecondsToString.js":2,"./cutContentToFitDiv.js":3,"./fontColor.js":5,"./fontSize.js":6,"./parseInput":9}]},{},[7]);
+},{"./convertTimeFromSecondsToString.js":2,"./cutContentToFitDiv.js":3,"./fontColor.js":5,"./fontSize.js":6,"./parseInput.js":9}]},{},[7]);

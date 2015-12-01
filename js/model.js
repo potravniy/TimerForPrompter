@@ -29,7 +29,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 			}
 			break
 		case "countDown":
-			this.timerValue = enteredTimeInSeconds;
+			this.timerValue = (enteredTimeInSeconds) ? enteredTimeInSeconds : 3599;
 			this.deadline = 0;
 			this.timeLeft = function (){
 				that.timerValue--;
