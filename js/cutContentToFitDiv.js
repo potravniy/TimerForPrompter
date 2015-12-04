@@ -1,17 +1,17 @@
 module.exports = function () {
-	var temp = window.Prompter.View.$messageDivSecondDispl.textContent;
-	window.Prompter.View.$messageDivSecondDispl.textContent = "";
+	var temp = window.Prompter.View.$messageOnPrompter.textContent;
+	window.Prompter.View.$messageOnPrompter.textContent = "";
 	var scrollHeight,
 		toggle = true;
 	var id = setInterval(cutContentToFitDiv, 4);
 	function cutContentToFitDiv() {
-		if (!scrollHeight) scrollHeight = window.Prompter.View.$messageDivSecondDispl.scrollHeight;
+		if (!scrollHeight) scrollHeight = window.Prompter.View.$messageOnPrompter.scrollHeight;
 		if(toggle){
-			window.Prompter.View.$messageDivSecondDispl.textContent = temp;
+			window.Prompter.View.$messageOnPrompter.textContent = temp;
 			toggle = false;
 		} else {
-			if(window.Prompter.View.$messageDivSecondDispl.scrollHeight > scrollHeight){
-				temp = window.Prompter.View.$messageDivSecondDispl.textContent.slice(0, -1);
+			if(window.Prompter.View.$messageOnPrompter.scrollHeight > scrollHeight){
+				temp = window.Prompter.View.$messageOnPrompter.textContent.slice(0, -1);
 				toggle = true;
 			} else {
 				clearInterval(id);

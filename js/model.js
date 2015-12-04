@@ -6,7 +6,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 	this.emit = emit;
 	this.type = typeOfTimer;
 	switch (typeOfTimer){
-		case "countUp":
+		case "count-up":
 			this.timerValue = 0;
 			this.deadline = enteredTimeInSeconds;
 			this.timeLeft = function (){
@@ -28,7 +28,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				that.emit('timerRun', customDetail());
 			}
 			break
-		case "countDown":
+		case "count-down":
 			this.timerValue = (enteredTimeInSeconds) ? enteredTimeInSeconds : 3599;
 			this.deadline = 0;
 			this.timeLeft = function (){

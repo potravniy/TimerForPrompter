@@ -1,4 +1,7 @@
-﻿
+﻿/******************/
+/*    #Static     */
+/******************/
+
 *,
 *:before,
 *:after {
@@ -76,7 +79,6 @@ input#time,
 button#screen2 {
     height: calc(18% - 4px);
 }
-
 textarea {
     display: block;
     width: calc(100% - 4px);
@@ -90,7 +92,6 @@ textarea {
     resize: none;
     clear: both;
 }
-
 div {
 	width: calc(100% - 4px);
     background-color: black;
@@ -100,7 +101,7 @@ div {
     text-align: center;
     clear: both;
 }
-div#time_left {
+#time_left {
     height: 25%;
     width: 100%;
     line-height: 1.1;
@@ -108,11 +109,44 @@ div#time_left {
     color: greenyellow;
     padding: 20px;
 }
-div#message_show {
+#message_show {
     height: 15%;
 	width: 100%;
     line-height: 1.35;
     font-size: 1.3em;
     color: yellow;
     padding: 3px;
+}
+
+/******************/
+/*    #Dynamic    */
+/******************/
+
+button.start_stop::after {
+    content: "пуск";
+}
+.count-up #up::after,
+.count-down #down::after {
+    content: "пауза";
+}
+.count-up-paused #up::after,
+.count-down-paused #down::after {
+    content: "продолжить";
+}
+[class*=up] #up,
+[class*=down] #down,
+[class*=deadline] #deadline_start {
+    background-color: springgreen;
+}
+button#screen2::after {
+    content: "создать";
+}
+.prompter-on button#screen2::after {
+    content: "закрыть";
+}
+.prompter-off #message_show::after {
+    content: "Нет окна суфлера";
+}
+[class*=over] #time {
+    background-color: red;
 }

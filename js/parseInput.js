@@ -1,6 +1,8 @@
+/* global Prompter */
 module.exports = function (timeString) {
-    if(!timeString){
-        timeString = (Prompter.$inputAndDisplayTime.value ? Prompter.$inputAndDisplayTime.value : 0);
+    if (!timeString) {
+        timeString = (Prompter.$inputAndDisplayTime.value
+            ? Prompter.$inputAndDisplayTime.value : 0);
     }
     var result = {
         value: NaN,
@@ -17,7 +19,9 @@ module.exports = function (timeString) {
                 alert("Допустимо вводить только цифры и двоеточия.");
                 return result
             }
-            if (timeString[i] !== ":") timeNumber = timeNumber * 10 + (+timeString[i]);
+            if (timeString[i] !== ":") {
+                timeNumber = timeNumber * 10 + (+timeString[i]);
+            }
         }
     } else timeNumber = timeString;
 

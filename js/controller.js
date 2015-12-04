@@ -10,19 +10,19 @@ var Controller = function () {
 		switch (event.target || event.srcElement) {
 			case window.Prompter.$buttonCountUp :
 				if(!that._timer){
-					that._timer = new Timer("countUp", input.value);
-				} else if (that._timer.type === "countUp" && !that._timer.paused) {
+					that._timer = new Timer("count-up", input.value);
+				} else if (that._timer.type === "count-up" && !that._timer.paused) {
 					that._timer.pause();
-				} else if (that._timer.type === "countUp" && that._timer.paused) {
+				} else if (that._timer.type === "count-up" && that._timer.paused) {
 					that._timer.run();
 				}
 				break
 			case window.Prompter.$buttonCountDown :
 				if(!that._timer){
-					that._timer = new Timer("countDown", input.value);
-				} else if (that._timer.type === "countDown" && !that._timer.paused) {
+					that._timer = new Timer("count-down", input.value);
+				} else if (that._timer.type === "count-down" && !that._timer.paused) {
 					that._timer.pause();
-				} else if (that._timer.type === "countDown" && that._timer.paused) {
+				} else if (that._timer.type === "count-down" && that._timer.paused) {
 					that._timer.run();
 				}
 				break

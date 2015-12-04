@@ -4,12 +4,13 @@ module.exports = function (event) {
 	var fontColor = "";
 	var timeLeftSeconds = Infinity;
 	switch (event.detail.type){
-		case "countUp":
+		case "count-up":
 			if(event.detail.deadline !== "0:00"){
-				timeLeftSeconds = parseInput(event.detail.deadline).value - parseInput(event.detail.time).value;
+				timeLeftSeconds = parseInput(event.detail.deadline).value
+					- parseInput(event.detail.time).value;
 			}
 			break
-		case "countDown":
+		case "count-down":
 			timeLeftSeconds = parseInput(event.detail.time).value;
 			break
 		case "deadline":
@@ -23,5 +24,17 @@ module.exports = function (event) {
 	} else {
 		fontColor = "red";
 	}
-	return fontColor;
+    var fontSize = undefined;
+    var minFontSize = 23;
+    var maxFontSize = 40;
+    var minStringLength = 4;
+    var maxStringLength = 8;
+    fontSize = Math.floor(minFontSize 
+    	+ (maxStringLength - event.detail.time.length)
+        * (maxFontSize - minFontSize) / (maxStringLength - minStringLength));
+
+	return {
+		color: fontColor,
+		size: fontSize + 'vw'
+	}
 }

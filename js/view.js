@@ -1,17 +1,38 @@
 /* global Prompter */
 var parseInput = require('./parseInput.js');
 var toStr = require('./convertTimeFromSecondsToString.js');
-var fontSize = require("./fontSize.js");
-var fontColor = require("./fontColor.js");
-var cutContentToFitDiv = require("./cutContentToFitDiv.js")
+var fontFormat = require("./fontFormat.js");
+var cutContentToFit = require("./cutContentToFitDiv.js");
 
 var View = function () {
 	var that = this;
-	this._prompterWindow = undefined;
-	this._$timeOnPrompter = null;
-	window.Prompter.View.$messageDivSecondDispl = null;
+	this._state = {
+		_prompterState: "prompter-off",
+		prompterStateSet: function(str){
+			if(str==="prompter-off" || str==="prompter-on") {
+				that._state._prompterState = str;
+				that._state._send();
+			} else throw Error;
+		},
+		_timerState: "no-timer",
+		timerStateSet: function(str){
+			if(str==="no-timer" || str==="count-up" || str==="count-up-paused" 
+			|| str==="count-up-over" || str==="count-down" || str==="count-down-paused" 
+			|| str==="count-down-over" || str==="deadline"  || str==="deadline-over") {
+				that._state._timerState = str;
+				that._state._send();
+			} else throw Error;
+		},
+		_send: function(){
+			Prompter.$body.className = that._state._prompterState + " " 
+			+ that._state._timerState;
+		}
+	}
+	that._state._send();
 	this._$prompterWindowButtonOnOff = document.querySelector("button#screen2");
-	Prompter.$showMessage.textContent = "Нет окна суфлера";
+	this._prompterWindow = null;
+	window.Prompter.View.$timeOnPrompter = null;
+	window.Prompter.View.$messageOnPrompter = null;
 
 	this._processKeyDown = function (event) {
 	    if (event.keyCode === 13) {
@@ -22,97 +43,67 @@ var View = function () {
 	    }
 	}
 	this._processMessage = function () {
-	    if (window.Prompter.View.$messageDivSecondDispl) {
+	    if (that._state._prompterState === "prompter-on") {
 	        that._showMessage();
 	    } else {
 	    	that._openPrompterWindow();
-	    	Prompter.$showMessage.textContent = "Нет окна суфлера";
 	    }
 	}
 	this._showMessage = function () {
-	        window.Prompter.View.$messageDivSecondDispl.textContent = Prompter.$showMessage.textContent = Prompter.$inputMessage.value;
-	        Prompter.$inputMessage.value = "";
-	        cutContentToFitDiv();
+		window.Prompter.View.$messageOnPrompter.textContent
+		= Prompter.$showMessage.textContent = Prompter.$inputMessage.value;
+		Prompter.$inputMessage.value = "";
+		cutContentToFit();
 	}
 	this._timerStarted = function(event) {
+		that._state.timerStateSet(event.detail.type);
+		that._showTimeOnPrompter(event);
 		switch (event.detail.type) {
-			case "countUp":
-				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
-				Prompter.$buttonCountUp.style["background-color"] = "#0f0";
-				Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пауза";
-				that._showTimeOnPrompter(event);
-				break
-			case "countDown":
-				Prompter.$inputAndDisplayTime.value = event.detail.time;
-				Prompter.$buttonCountDown.style["background-color"] = "#0f0";
-				Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пауза";
-				that._showTimeOnPrompter(event);
-				break
+			case "count-up":
 			case "deadline":
 				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
-				Prompter.$buttonCountDeadline.style["background-color"] = "#0f0";
-				that._showTimeOnPrompter(event);
+				break
+			case "count-down":
+				Prompter.$inputAndDisplayTime.value = event.detail.time;
 				break
 		}
 	}
 	this._timerPaused = function(event) {
+		that._state.timerStateSet(event.detail.type + "-paused");
 		that._showTimeOnPrompter(event)
-		switch (event.detail.type) {
-		case "countUp":
-			Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пуск";
-			break
-		case "countDown":
-			Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пуск";
-			break
-		}
 	}
 	this._timerRun = function(event) {
+		that._state.timerStateSet(event.detail.type);
 		that._showTimeOnPrompter(event)
-		switch (event.detail.type) {
-		case "countUp":
-			Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пауза";
-			break
-		case "countDown":
-			Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пауза";
-			break
-		}
 	}
 	this._timerCancelled = function(event) {
-		that._$timeOnPrompter.textContent = Prompter.$showTimeLeft.textContent = "";
-		that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = "";	
+		that._state.timerStateSet("no-timer");
+		window.Prompter.View.$timeOnPrompter.textContent
+			= Prompter.$showTimeLeft.textContent = "";
 	    Prompter.$inputAndDisplayTime.value = "";
-	    Prompter.$inputAndDisplayTime.style["background-color"] = "";
-		switch (event.detail.type) {
-			case "countUp":
-				Prompter.$buttonCountUp.style["background-color"] = "";
-				Prompter.$buttonCountUp.innerHTML = "Прямой отсчет<br>пуск";
-				break
-			case "countDown":
-				Prompter.$buttonCountDown.style["background-color"] = "";
-				Prompter.$buttonCountDown.innerHTML = "Обратный отсчет<br>пуск";
-				break
-			case "deadline":
-				Prompter.$buttonCountDeadline.style["background-color"] = "";
-				break
-		}
 	}
 	this._timeOver = function(event) {
+		that._state.timerStateSet(event.detail.type + "-over");
 		that._showTimeOnPrompter(event)
-	    Prompter.$inputAndDisplayTime.style["background-color"] = "#f00";
 	}
 	this._openPrompterWindow = function() {
-	    var strWindowFeatures = "menubar=no, location=no, locationbar=no, toolbar=no, personalbar=no, status=no, resizable=yes, scrollbars=no,status=no";
+	    var strWindowFeatures = "menubar=no, location=no, locationbar=no";
+		strWindowFeatures += "toolbar=no, personalbar=no, status=no";
+		strWindowFeatures += "resizable=yes, scrollbars=no,status=no";
 	    var strWindowPositionAndSize = "height=300,width=500";
-	    that._prompterWindow = window.open("prompter.html", "prompter", strWindowPositionAndSize + "," + strWindowFeatures);
+	    that._prompterWindow = window.open("prompter.html", "prompter"
+			, strWindowPositionAndSize + "," + strWindowFeatures);
 	    if(!that._prompterWindow) return;
 	    that._prompterWindow.addEventListener('load', function () {
-	        that._$timeOnPrompter = that._prompterWindow.document.querySelector("div#time_left");
-	        window.Prompter.View.$messageDivSecondDispl = that._prompterWindow.document.querySelector("div#message_show");
-	        that._$prompterWindowButtonOnOff.innerHTML = "Закрыть<br>второе<br>окно";
+	        window.Prompter.View.$timeOnPrompter
+				= that._prompterWindow.document.querySelector("div#time_left");
+	        window.Prompter.View.$messageOnPrompter
+				= that._prompterWindow.document.querySelector("div#message_show");
+	        that._state.prompterStateSet("prompter-on");
 	        that._showMessage();
 		    window.addEventListener('unload', that._prompterWindowCloseFunc);
 	        that._prompterWindow.addEventListener('unload', that._closePrompterWindow);
-	        that._prompterWindow.addEventListener('resize', that.cutContentToFitDiv);
+	        that._prompterWindow.addEventListener('resize', that.cutContentToFit);
 	    });
 	}
 	this._closePrompterWindow = function() {
@@ -120,27 +111,28 @@ var View = function () {
 	    that._prompterWindow.removeEventListener('unload', that._closePrompterWindow);
 	    that._prompterWindow.removeEventListener('resize', that._showMessage);
 	    that._prompterWindow.close();
-		that._prompterWindow = undefined;
-		that._$timeOnPrompter = null;
-		window.Prompter.View.$messageDivSecondDispl = null;
-    	that._$prompterWindowButtonOnOff.innerHTML = "Создать<br>второе<br>окно";
-    	Prompter.$showMessage.textContent = "Нет окна суфлера";
+		that._prompterWindow = null;
+		window.Prompter.View.$timeOnPrompter = null;
+		window.Prompter.View.$messageOnPrompter = null;
+	    that._state.prompterStateSet("prompter-off");
 	}
 	this._prompterWindowOnOff = function () {
-	    if (that._prompterWindow) that._closePrompterWindow();
+	    if (that._state._prompterState === "prompter-on") that._closePrompterWindow();
 	    else that._openPrompterWindow();
 	}
 	this._prompterWindowCloseFunc = function () {
-	    if (that._prompterWindow) that._closePrompterWindow();
+	    if (that._state._prompterState === "prompter-on") that._closePrompterWindow();
 	}
 	this._showTimeOnPrompter = function(event){
-		if (that._$timeOnPrompter) {
-            that._$timeOnPrompter.style['font-size'] = fontSize(event) + 'vw';
-			that._$timeOnPrompter.style.color = Prompter.$showTimeLeft.style.color = fontColor(event);
-			that._$timeOnPrompter.textContent = Prompter.$showTimeLeft.textContent = event.detail.time;
+		if (that._state._prompterState === "prompter-on") {
+			var font = fontFormat(event);
+            window.Prompter.View.$timeOnPrompter.style['font-size'] = font.size;
+			window.Prompter.View.$timeOnPrompter.style.color
+				= Prompter.$showTimeLeft.style.color = font.color;
+			window.Prompter.View.$timeOnPrompter.textContent
+				= Prompter.$showTimeLeft.textContent = event.detail.time;
 		}
 		else {
-			Prompter.$showMessage.textContent = "Нет окна суфлера";
 			that._openPrompterWindow();
 		}
 	}
