@@ -144,7 +144,7 @@ button#screen2::after {
 .prompter-on button#screen2::after {
     content: "закрыть";
 }
-.prompter-off #message_show::after {
+.prompter-off #message_show::before {
     content: "Нет окна суфлера";
 }
 [class*=over] #time {

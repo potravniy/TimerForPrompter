@@ -39,7 +39,7 @@ var View = function () {
 	        that._processMessage();
 	        event.preventDefault();
 	    } else if (event.keyCode === 27) {
-	        Prompter.$inputMessage.textContent = "";
+			Prompter.$inputMessage.value = "";
 	    }
 	}
 	this._processMessage = function () {
@@ -114,6 +114,7 @@ var View = function () {
 		that._prompterWindow = null;
 		window.Prompter.View.$timeOnPrompter = null;
 		window.Prompter.View.$messageOnPrompter = null;
+		Prompter.$showMessage.textContent = "";
 	    that._state.prompterStateSet("prompter-off");
 	}
 	this._prompterWindowOnOff = function () {
