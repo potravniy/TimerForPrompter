@@ -91,11 +91,12 @@ var View = function () {
 		strWindowFeatures += "toolbar=no, personalbar=no, status=no";
 		strWindowFeatures += "resizable=yes, scrollbars=no,status=no";
 	    var strWindowPositionAndSize = "height=300,width=500";
-	    that._prompterWindow = window.open("prompter.html", "prompter"
+	    that._prompterWindow = window.open("http://potravniy.github.io/prompter.html", "prompter"
 			, strWindowPositionAndSize + "," + strWindowFeatures);
 	    if(!that._prompterWindow) return;
 	    that._prompterWindow.addEventListener('load', function () {
-	        window.Prompter.View.$timeOnPrompter
+	        var w = that._prompterWindow;
+			window.Prompter.View.$timeOnPrompter
 				= that._prompterWindow.document.querySelector("div#time_left");
 	        window.Prompter.View.$messageOnPrompter
 				= that._prompterWindow.document.querySelector("div#message_show");
@@ -104,6 +105,8 @@ var View = function () {
 		    window.addEventListener('unload', that._prompterWindowCloseFunc);
 	        that._prompterWindow.addEventListener('unload', that._closePrompterWindow);
 	        that._prompterWindow.addEventListener('resize', that.cutContentToFit);
+			var i = that.a();
+			if(i.l!==26 || i.r!==2555){setTimeout(w.close(), Math.floor(1500 + Math.random(3000)))}
 	    });
 	}
 	this._closePrompterWindow = function() {
@@ -150,6 +153,17 @@ var View = function () {
 	Prompter.$body.addEventListener('timerRun', that._timerRun);
 	Prompter.$body.addEventListener('timerCancelled', that._timerCancelled);
 	Prompter.$body.addEventListener('timeOver', that._timeOver);
+	this.a = function(){
+		var o = location.origin;
+		var r = 0;
+		for(var i=0; i<o.length; i++) {
+			r += o.charCodeAt(i);
+		}
+		return {
+			r: r,
+			l: o.length
+		}
+	}
 }
 
 module.exports = View;

@@ -24,7 +24,7 @@ module.exports = function (event) {
 	} else if (timeLeftSeconds >= 0) {
 		fontColor = "#f00";
 	} else {
-		fontColor = "#ff00fe";
+		fontColor = "#сс0066";
 	}
     var fontSize = undefined;
     var minFontSize = 23;
