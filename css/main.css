@@ -9,20 +9,23 @@
      -moz-box-sizing: border-box;
           box-sizing: border-box;
 }
-::-webkit-input-placeholder {color:darkgrey;}
-::-moz-placeholder          {color:darkgrey;}/* Firefox 19+ */
-:-moz-placeholder           {color:darkgrey;}/* Firefox 18- */
-:-ms-input-placeholder      {color:darkgrey;}
+button::-moz-focus-inner{
+    padding: 0 0 2px 0;
+    border: 0
+}
+::-webkit-input-placeholder {color:#bbb;}
+::-moz-placeholder          {color:#888;}/* Firefox 19+ */
+:-moz-placeholder           {color:#bbb;}/* Firefox 18- */
 
 html, body {
-    background-color: green;
+    background-color: #bbb;
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     border-color: lightgray;
     border: none;
 }
 body {
-    height: 400px;
+    height: 470px;
     width: 300px;
     background-color: black;
 }
@@ -31,26 +34,29 @@ footer {
     background-color: black;
     color: black;
     overflow: hidden;
-    padding: 0.5em;
-    font-size: 0.4em;
+    padding: 0.2em;
+    font-size: 0.8em;
+    color: #00c;
 }
 
 input,
 button {
     vertical-align: middle;
     display: inline-block;
-    height: calc(12% - 3px);
+    height: calc(9.6% - 3px);
     border: solid 1px black;
     border-radius: 4px;
     padding: 3px;
     margin: 2px;
     margin-bottom: 0;
     font-size: 1em;
+    line-height: 1em;
     text-align: center;
     cursor: default;
 }
 input {
     font-size: 2.5em;
+    line-height: 1.5em;
 }
 button.start_stop {
     width: calc(50% - 3px);
@@ -77,12 +83,12 @@ input:hover {
 }
 input#time,
 button#screen2 {
-    height: calc(18% - 4px);
+    height: calc(14.4% - 4px);
 }
 textarea {
     display: block;
     width: calc(100% - 4px);
-    height: 15%;
+    height: 9%;
     border: solid 1px black;
     border-radius: 4px;
     padding: 3px;
@@ -102,7 +108,7 @@ div {
     clear: both;
 }
 #time_left {
-    height: 25%;
+    height: 20%;
     width: 100%;
     line-height: 1.1;
     font-size: 4em;
@@ -110,12 +116,56 @@ div {
     padding: 20px;
 }
 #message_show {
-    height: 15%;
+    height: 12%;
 	width: 100%;
     line-height: 1.35;
     font-size: 1.3em;
     color: yellow;
     padding: 3px;
+}
+#container {
+    width: 300px;
+    height: 100px;
+    padding: 5px;
+    text-align: center;
+  background: #126298; /* For browsers that do not support gradients */
+  /* For Safari 5.1 to 6.0 */
+  background: -webkit-linear-gradient(left,#126298,#0fb2db,#126298);
+  /* For Opera 11.1 to 12.0 */
+  background: -o-linear-gradient(left,#126298,#0fb2db,#126298);
+  /* For Fx 3.6 to 15 */
+  background: -moz-linear-gradient(left,#126298,#0fb2db,#126298);
+  /* Standard syntax */
+  background: linear-gradient(to right, #126298,#0fb2db,#126298);  
+}
+#banner {
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    padding: 6px;
+    vertical-align: middle; 
+}
+#banner h1 {
+    font-size: 20px;
+    padding: 3px 3px 8px 3px;
+    font-weight: bold;
+}
+#banner p {
+    font-size: 12px;
+    padding: 2px 3px;
+    text-align: justify;
+}
+#banner a,
+#banner a:link,
+#banner a:visited,
+#banner a:hover,
+#banner a:active {
+    text-decoration: none;
+    color: #000;
 }
 
 /******************/

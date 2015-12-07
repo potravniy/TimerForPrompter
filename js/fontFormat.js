@@ -20,9 +20,11 @@ module.exports = function (event) {
 	if(timeLeftSeconds > 120){
 		fontColor = "";
 	} else if (timeLeftSeconds > 60) {
-		fontColor = "orange";
+		fontColor = "#ffa500";
+	} else if (timeLeftSeconds >= 0) {
+		fontColor = "#f00";
 	} else {
-		fontColor = "red";
+		fontColor = "#ff00fe";
 	}
     var fontSize = undefined;
     var minFontSize = 23;

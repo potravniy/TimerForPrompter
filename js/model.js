@@ -13,7 +13,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				that.timerValue++;
 				that.emit('timerChanged', customDetail());
 				if(that.timerValue === that.deadline && that.deadline) {
-					that.pause();
+					// that.pause();
 					that.emit('timeOver', customDetail());
 				}
 			}

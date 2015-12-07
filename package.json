@@ -17,7 +17,7 @@
     "browserify": "latest"
   },
   "scripts": {
-    "build-js": "browserify js/main.js > js/browserifyed.js",
-    "watch-js": "watchify js/main.js -o js/browserifyed.js -v"
+    "build-js": "browserify js/main.js -d | uglifyjs > js/browserifyed.js",
+    "watch-js": "watchify js/main.js -d | uglifyjs > js/browserifyed.js -v"
   }
 }
