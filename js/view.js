@@ -2,168 +2,85 @@
 var parseInput = require('./parseInput.js');
 var toStr = require('./convertTimeFromSecondsToString.js');
 var fontFormat = require("./fontFormat.js");
-var cutContentToFit = require("./cutContentToFitDiv.js");
+var emit = require("./emitEvent");
 
 var View = function () {
+	var $body = window.Prompter.$body;
+	var $inputTime = document.querySelector("input#time");
+	var $timeOnMain = document.querySelector("div#time_left");
+	var $timeOnPrompter = null;
+	var temp = undefined;
 	var that = this;
-	this._state = {
-		_prompterState: "prompter-off",
-		prompterStateSet: function(str){
-			if(str==="prompter-off" || str==="prompter-on") {
-				that._state._prompterState = str;
-				that._state._send();
-			} else throw Error;
-		},
-		_timerState: "no-timer",
-		timerStateSet: function(str){
-			if(str==="no-timer" || str==="count-up" || str==="count-up-paused" 
-			|| str==="count-up-over" || str==="count-down" || str==="count-down-paused" 
-			|| str==="count-down-over" || str==="deadline"  || str==="deadline-over") {
-				that._state._timerState = str;
-				that._state._send();
-			} else throw Error;
-		},
-		_send: function(){
-			Prompter.$body.className = that._state._prompterState + " " 
-			+ that._state._timerState;
-		}
-	}
-	that._state._send();
-	this._$prompterWindowButtonOnOff = document.querySelector("button#screen2");
-	this._prompterWindow = null;
-	window.Prompter.View.$timeOnPrompter = null;
-	window.Prompter.View.$messageOnPrompter = null;
-
-	this._processKeyDown = function (event) {
-	    if (event.keyCode === 13) {
-	        that._processMessage();
-	        event.preventDefault();
-	    } else if (event.keyCode === 27) {
-			Prompter.$inputMessage.value = "";
-	    }
-	}
-	this._processMessage = function () {
-	    if (that._state._prompterState === "prompter-on") {
-	        that._showMessage();
-	    } else {
-	    	that._openPrompterWindow();
-	    }
-	}
-	this._showMessage = function () {
-		window.Prompter.View.$messageOnPrompter.textContent
-		= Prompter.$showMessage.textContent = Prompter.$inputMessage.value;
-		Prompter.$inputMessage.value = "";
-		cutContentToFit();
-	}
+	this.emit = emit;
+	
 	this._timerStarted = function(event) {
-		that._state.timerStateSet(event.detail.type);
-		that._showTimeOnPrompter(event);
+		window.Tmr.state.timerSet(event.detail.type);
+		that._showTime(event);
 		switch (event.detail.type) {
-			case "count-up":
-			case "deadline":
-				Prompter.$inputAndDisplayTime.value = event.detail.deadline;
+			case "up":
+			case "ddln":
+				$inputTime.value = event.detail.deadline;   
 				break
-			case "count-down":
-				Prompter.$inputAndDisplayTime.value = event.detail.time;
+			case "down":
+				$inputTime.value = event.detail.time;
 				break
 		}
 	}
 	this._timerPaused = function(event) {
-		that._state.timerStateSet(event.detail.type + "-paused");
-		that._showTimeOnPrompter(event)
+		window.Tmr.state.timerSet(event.detail.type + "-paused");              
+		that._showTime(event)
 	}
 	this._timerRun = function(event) {
-		that._state.timerStateSet(event.detail.type);
-		that._showTimeOnPrompter(event)
+		window.Tmr.state.timerSet(event.detail.type);
+		that._showTime(event)
 	}
 	this._timerCancelled = function(event) {
-		that._state.timerStateSet("no-timer");
-		window.Prompter.View.$timeOnPrompter.textContent
-			= Prompter.$showTimeLeft.textContent = "";
-	    Prompter.$inputAndDisplayTime.value = "";
+		window.Tmr.state.timerSet("no-timer");
+		window.Tmr.state.timerSetOver("nope");
+		$timeOnPrompter.textContent = $timeOnMain.textContent = "";
+	    $inputTime.value = "";
 	}
 	this._timeOver = function(event) {
-		that._state.timerStateSet(event.detail.type + "-over");
-		that._showTimeOnPrompter(event)
+		window.Tmr.state.timerSetOver("over");
+		that._showTime(event)
 	}
-	this._openPrompterWindow = function() {
-	    var strWindowFeatures = "menubar=no, location=no, locationbar=no";
-		strWindowFeatures += "toolbar=no, personalbar=no, status=no";
-		strWindowFeatures += "resizable=yes, scrollbars=no,status=no";
-	    var strWindowPositionAndSize = "height=300,width=500";
-	    that._prompterWindow = window.open("http://potravniy.github.io/prompter.html", "prompter"
-			, strWindowPositionAndSize + "," + strWindowFeatures);
-	    if(!that._prompterWindow) return;
-	    that._prompterWindow.addEventListener('load', function () {
-	        var w = that._prompterWindow;
-			window.Prompter.View.$timeOnPrompter
-				= that._prompterWindow.document.querySelector("div#time_left");
-	        window.Prompter.View.$messageOnPrompter
-				= that._prompterWindow.document.querySelector("div#message_show");
-	        that._state.prompterStateSet("prompter-on");
-	        that._showMessage();
-		    window.addEventListener('unload', that._prompterWindowCloseFunc);
-	        that._prompterWindow.addEventListener('unload', that._closePrompterWindow);
-	        that._prompterWindow.addEventListener('resize', that.cutContentToFit);
-			var i = that.a();
-			if(i.l!==26 || i.r!==2555){setTimeout(w.close(), Math.floor(1500 + Math.random(3000)))}
-	    });
-	}
-	this._closePrompterWindow = function() {
-	    window.removeEventListener('unload', that._prompterWindowCloseFunc);
-	    that._prompterWindow.removeEventListener('unload', that._closePrompterWindow);
-	    that._prompterWindow.removeEventListener('resize', that._showMessage);
-	    that._prompterWindow.close();
-		that._prompterWindow = null;
-		window.Prompter.View.$timeOnPrompter = null;
-		window.Prompter.View.$messageOnPrompter = null;
-		Prompter.$showMessage.textContent = "";
-	    that._state.prompterStateSet("prompter-off");
-	}
-	this._prompterWindowOnOff = function () {
-	    if (that._state._prompterState === "prompter-on") that._closePrompterWindow();
-	    else that._openPrompterWindow();
-	}
-	this._prompterWindowCloseFunc = function () {
-	    if (that._state._prompterState === "prompter-on") that._closePrompterWindow();
-	}
-	this._showTimeOnPrompter = function(event){
-		if (that._state._prompterState === "prompter-on") {
-			var font = fontFormat(event);
-            window.Prompter.View.$timeOnPrompter.style['font-size'] = font.size;
-			window.Prompter.View.$timeOnPrompter.style.color
-				= Prompter.$showTimeLeft.style.color = font.color;
-			window.Prompter.View.$timeOnPrompter.textContent
-				= Prompter.$showTimeLeft.textContent = event.detail.time;
+	this._showTime = function(event){
+		if (window.Tmr.state._prompterSt === "prompter-on") {
+			var format = fontFormat(event);
+            $timeOnPrompter.style.fontSize = format.size;
+			$timeOnPrompter.style.color
+				= $timeOnMain.style.color = format.color;
+			$timeOnPrompter.textContent
+				= $timeOnMain.textContent = format.sign + event.detail.time;
 		}
 		else {
-			that._openPrompterWindow();
+	    	that.emit("openPrompterWindow");
+			temp = event;
 		}
 	}
-
-	Prompter.$inputAndDisplayTime.addEventListener('change', function () {
+	this._onWidowCreate = function(){
+		$timeOnPrompter = window.Tmr.prompterWindow.querySelector("#time_left");
+		if(temp) {
+			that._showTime(temp);
+			temp = undefined;
+		}
+	}
+	this._onWidowClose = function(){
+		$timeOnPrompter = null;
+	}
+	$inputTime.addEventListener('change', function () {
 	    var input = parseInput();
-	    if (input.isValid) Prompter.$inputAndDisplayTime.value = toStr(input.value);
+	    if (input.isValid) $inputTime.value = toStr(input.value);
 	});
-	this._$prompterWindowButtonOnOff.addEventListener('click', that._prompterWindowOnOff);
-	Prompter.$inputMessage.addEventListener("keydown", that._processKeyDown);
-	Prompter.$body.addEventListener('timerStarted', that._timerStarted);
-	Prompter.$body.addEventListener('timerChanged', that._showTimeOnPrompter);
-	Prompter.$body.addEventListener('timerPaused', that._timerPaused);
-	Prompter.$body.addEventListener('timerRun', that._timerRun);
-	Prompter.$body.addEventListener('timerCancelled', that._timerCancelled);
-	Prompter.$body.addEventListener('timeOver', that._timeOver);
-	this.a = function(){
-		var o = location.origin;
-		var r = 0;
-		for(var i=0; i<o.length; i++) {
-			r += o.charCodeAt(i);
-		}
-		return {
-			r: r,
-			l: o.length
-		}
-	}
+	$body.addEventListener('timerStarted', that._timerStarted);
+	$body.addEventListener('timerChanged', that._showTime);
+	$body.addEventListener('timerPaused', that._timerPaused);
+	$body.addEventListener('timerRun', that._timerRun);
+	$body.addEventListener('timerCancelled', that._timerCancelled);
+	$body.addEventListener('timeOver', that._timeOver);
+	$body.addEventListener('prompterWindowCreated', that._onWidowCreate);
+	$body.addEventListener('prompterWindowClosed', that._onWidowClose);
+	window.Tmr.state._send();
 }
 
 module.exports = View;

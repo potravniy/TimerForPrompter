@@ -1,19 +1,41 @@
 window.onload = function () {
-   window.Prompter = {
+   window.Tmr = {
         $body: document.querySelector("body"),
-        $buttonCountUp: document.querySelector("button#up"),
-        $buttonCountDown: document.querySelector("button#down"),
-        $inputAndDisplayTime: document.querySelector("input#time"),
-        $buttonCountDeadline: document.querySelector("button#deadline_start"),
-        $buttonReset: document.querySelector("button#reset"),
-        $inputMessage: document.querySelector("textarea#message"),
-        $showTimeLeft: document.querySelector("div#time_left"),
-        $showMessage: document.querySelector("div#message_show"),
-        View: {}
+        prompterWindow: null,
+        state: {
+            _prompterSt: "prompter-off",
+            prompterSet: function(str){
+                if(str==="prompter-off" || str==="prompter-on") {
+                    window.Tmr.state._prompterSt = str;
+                    window.Tmr.state._send();
+                } else throw Error;
+            },
+            _timerSt: "no-timer",
+            timerSet: function(str){
+                if(str==="up" || str==="up-paused"
+                || str==="down" || str==="down-paused"
+                || str==="ddln" || str==="no-timer") {
+                    window.Tmr.state._timerSt = str;
+                    window.Tmr.state._send();
+                } else throw Error;
+            },
+            _timerOver: "nope",
+            timerSetOver: function(str){
+                if(str==="nope" || str==="over") {
+                    window.Tmr.state._timerOver = str;
+                    window.Tmr.state._send();
+                } else throw Error;
+            },
+            _send: function(){
+                window.Tmr.$body.className = window.Tmr.state._prompterSt + " " 
+                + window.Tmr.state._timerSt + " " + window.Tmr.state._timerOver;
+            }
+        }
     };
-	var Controller = require('./controller.js');
-	var View = require("./view.js");
+    
+	var timerController = new require('./controller.js');
+    var prompterWindowController = new require("./prompterWindowCtrl.js")
+	var view = new require("./view.js");
+    var messenger = new require("./messenger.js")
     require('./secondsEventEmitter.js');
-    var controller = new Controller();
-    var view = new View();
 }

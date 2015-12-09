@@ -63,12 +63,12 @@ button.start_stop {
 }
 button#up,
 input#time,
-button#deadline_start {
+button#deadline {
     margin-right: 0;
 }
 
 input#time,
-button#deadline_start {
+button#deadline {
     width: calc(70% - 3px);
 }
 button#screen2,
@@ -172,31 +172,31 @@ div {
 /*    #Dynamic    */
 /******************/
 
-button.start_stop::after {
-    content: "пуск";
+.no-timer .start_stop::after {
+    content: attr(stopped);
 }
-.count-up #up::after,
-.count-down #down::after {
-    content: "пауза";
+.up #up::after,
+.down #down::after {
+    content: attr(running);
 }
-.count-up-paused #up::after,
-.count-down-paused #down::after {
-    content: "продолжить";
+.up-paused #up::after,
+.down-paused #down::after {
+    content: attr(paused);
 }
 [class*=up] #up,
 [class*=down] #down,
-[class*=deadline] #deadline_start {
+[class*=ddln] #deadline {
     background-color: springgreen;
 }
-button#screen2::after {
-    content: "создать";
+.prompter-off #screen2::after {
+    content: attr(prompter-off);
 }
-.prompter-on button#screen2::after {
-    content: "закрыть";
+.prompter-on #screen2::after {
+    content: attr(prompter-on);
 }
 .prompter-off #message_show::before {
-    content: "Нет окна суфлера";
+    content: attr(prompter-off);
 }
-[class*=over] #time {
+.over #time {
     background-color: red;
 }
