@@ -47,7 +47,5 @@ var Messenger = function() {
 		, that._windowCreated);
 	window.Tmr.$body.addEventListener('prompterWindowClosed'
 		, that._windowClosed);
-	
-	return this
 }
 module.exports = Messenger;

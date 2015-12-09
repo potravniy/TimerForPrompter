@@ -15,7 +15,6 @@ var WinControl = function(){
 	    window.Tmr.prompterWindow.addEventListener('load', start);
 		function start() {
 //	        var w = window.Tmr.prompterWindow;
-			that.emit("prompterWindowCreated");
 	        window.Tmr.state.prompterSet("prompter-on");
 		    window.addEventListener('unload', that._closeIfWindowIs);
 	        window.Tmr.prompterWindow.addEventListener('unload'
@@ -23,6 +22,7 @@ var WinControl = function(){
 //			var i = that.a();
 //			if(i.l!==26 || i.r!==2555){setTimeout(w.close(), Math.floor(1500 + Math.random(3000)))}
 		    window.Tmr.prompterWindow.removeEventListener('load', start);
+			that.emit("prompterWindowCreated");
 	    }
 	}
 	this._closeWindow = function() {

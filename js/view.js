@@ -5,7 +5,7 @@ var fontFormat = require("./fontFormat.js");
 var emit = require("./emitEvent");
 
 var View = function () {
-	var $body = window.Prompter.$body;
+	var $body = window.Tmr.$body;
 	var $inputTime = document.querySelector("input#time");
 	var $timeOnMain = document.querySelector("div#time_left");
 	var $timeOnPrompter = null;
@@ -22,7 +22,7 @@ var View = function () {
 				$inputTime.value = event.detail.deadline;   
 				break
 			case "down":
-				$inputTime.value = event.detail.time;
+				$inputTime.value = toStr(event.detail.time);
 				break
 		}
 	}
@@ -51,21 +51,22 @@ var View = function () {
 			$timeOnPrompter.style.color
 				= $timeOnMain.style.color = format.color;
 			$timeOnPrompter.textContent
-				= $timeOnMain.textContent = format.sign + event.detail.time;
+				= $timeOnMain.textContent = format.time;
 		}
 		else {
 	    	that.emit("openPrompterWindow");
 			temp = event;
 		}
 	}
-	this._onWidowCreate = function(){
-		$timeOnPrompter = window.Tmr.prompterWindow.querySelector("#time_left");
+	this._onWindowCreate = function(){
+		$timeOnPrompter = window.Tmr.prompterWindow.document
+			.querySelector("#time_left");
 		if(temp) {
 			that._showTime(temp);
 			temp = undefined;
 		}
 	}
-	this._onWidowClose = function(){
+	this._onWindowClose = function(){
 		$timeOnPrompter = null;
 	}
 	$inputTime.addEventListener('change', function () {
@@ -78,8 +79,8 @@ var View = function () {
 	$body.addEventListener('timerRun', that._timerRun);
 	$body.addEventListener('timerCancelled', that._timerCancelled);
 	$body.addEventListener('timeOver', that._timeOver);
-	$body.addEventListener('prompterWindowCreated', that._onWidowCreate);
-	$body.addEventListener('prompterWindowClosed', that._onWidowClose);
+	$body.addEventListener('prompterWindowCreated', that._onWindowCreate);
+	$body.addEventListener('prompterWindowClosed', that._onWindowClose);
 	window.Tmr.state._send();
 }
 

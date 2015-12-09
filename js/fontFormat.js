@@ -1,21 +1,19 @@
 var parseInput = require('./parseInput.js');
+var toStr = require('./convertTimeFromSecondsToString.js');
 
 module.exports = function (event) {
 	var fontColor = "";
 	var timeLeftSeconds = Infinity;
-	var sign = "";
 	switch (event.detail.type){
 		case "up":
 			if(event.detail.deadline !== "0:00"){
 				timeLeftSeconds = parseInput(event.detail.deadline).value
-					- parseInput(event.detail.time).value;
+					- event.detail.time;
 			}
 			break
 		case "down":
-			timeLeftSeconds = parseInput(event.detail.time).value;
-			break
 		case "ddln":
-			timeLeftSeconds = parseInput(event.detail.time).value;
+			timeLeftSeconds = event.detail.time;
 			break
 	}
 	if(timeLeftSeconds > 120){
@@ -26,20 +24,23 @@ module.exports = function (event) {
 		fontColor = "#f00";
 	} else {
 		fontColor = "#cc0066";
-		if (event.detail.type==="down" || event.detail.type==="ddln") sign="-";
 	}
+	if(event.detail.type === "up"){
+		timeLeftSeconds = event.detail.time;
+	}
+	var time = toStr(timeLeftSeconds);
     var fontSize = undefined;
     var minFontSize = 23;
     var maxFontSize = 40;
     var minStringLength = 4;
     var maxStringLength = 8;
-    fontSize = Math.floor(minFontSize 
-    	+ (maxStringLength - event.detail.time.length)
+    fontSize = Math.floor(minFontSize + (maxStringLength - time.length)
         * (maxFontSize - minFontSize) / (maxStringLength - minStringLength));
+    console.log("fontFormat: " + timeLeftSeconds + ", time: " + time);
 
 	return {
 		color: fontColor,
 		size: fontSize + 'vw',
-		sign: sign
+		time: time
 	}
 }

@@ -1,8 +1,8 @@
-/* global Prompter */
 module.exports = function (timeString) {
+    var $inputTime = document.querySelector("input#time");
     if (!timeString) {
-        timeString = (Prompter.$inputAndDisplayTime.value
-            ? Prompter.$inputAndDisplayTime.value : 0);
+        timeString = ($inputTime.value
+            ? $inputTime.value : 0);
     }
     var result = {
         value: NaN,
@@ -16,7 +16,7 @@ module.exports = function (timeString) {
                 return timeString[i] == item;
             })
             if (!isCharValid) {
-                alert("Допустимо вводить только цифры и двоеточия.");
+                $inputTime.value("ЧЧ:ММ:СС'");
                 return result
             }
             if (timeString[i] !== ":") {
@@ -27,17 +27,17 @@ module.exports = function (timeString) {
 
     var hours = Math.floor(timeNumber / 10000);
     if (hours > 23) {
-        alert("Значение 'часов' больше 23.");
+        $inputTime.value("ЧЧ > 23");
         return result
     }
     var minutes = Math.floor((timeNumber - hours * 10000) / 100);
     if (minutes > 59) {
-        alert("Значение 'минут' больше 59.");
+        $inputTime.value("ММ > 59");
         return result
     }
     var seconds = Math.floor(timeNumber - hours * 10000 - minutes * 100);
     if (seconds > 59) {
-        alert("Значение 'секунд' больше 59.");
+        $inputTime.value("СС > 59");
         return result
     }
     var timeInSeconds = hours * 3600 + minutes * 60 + seconds;

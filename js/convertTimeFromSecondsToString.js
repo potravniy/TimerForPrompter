@@ -1,4 +1,6 @@
 module.exports = function (timeInSeconds, fullFormat) {
+    var sign = (timeInSeconds < 0) ? "-" : "";
+    timeInSeconds = Math.abs(timeInSeconds);
     var h = Math.floor(timeInSeconds / (3600));
     var m = Math.floor((timeInSeconds - h * 3600) / 60);
     var s = Math.floor(timeInSeconds - h * 3600 - m * 60);
@@ -12,5 +14,6 @@ module.exports = function (timeInSeconds, fullFormat) {
             timeString = m + timeString;
         }
     }
-    return timeString;
+    console.log("convert: " + sign + timeString);
+    return sign + timeString;
 }

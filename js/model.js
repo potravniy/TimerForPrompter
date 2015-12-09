@@ -29,13 +29,14 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 			}
 			break
 		case "down":
-			this.timerValue = (enteredTimeInSeconds) ? enteredTimeInSeconds : 3599;
+			this.timerValue = (enteredTimeInSeconds) ? enteredTimeInSeconds
+				: 3599;
 			this.deadline = 0;
 			this.timeLeft = function (){
 				that.timerValue--;
 				that.emit('timerChanged', customDetail());
 				if(that.timerValue === 0) {
-					that.pause();
+					// that.pause();
 					that.emit('timeOver', customDetail());
 				}
 			}
@@ -60,14 +61,16 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 				this.deadline.setDate(this.deadline.getDate() + 1);
 			}
 			this.deadline.fromDateToString = function() {
-				return (that.deadline.getHours() + ':' + that.deadline.getMinutes() + ':' + that.deadline.getSeconds());
+				return (that.deadline.getHours()+':'+that.deadline.getMinutes()
+					+ ':' + that.deadline.getSeconds());
 			}
 			this.timerValue = Math.floor((this.deadline - new Date()) / 1000);
 			this.timeLeft = function () {
-				that.timerValue = Math.floor((that.deadline - new Date()) / 1000);
+				that.timerValue = Math.floor((that.deadline - new Date())/1000);
 				that.emit('timerChanged', customDetail());
 				if (that.timerValue === 0){
-					window.Tmr.$body.removeEventListener('newSecond', that.timeLeft);
+					// window.Tmr.$body.removeEventListener('newSecond'
+					// 	, that.timeLeft);
 					that.emit('timeOver', customDetail());
 				}
 			}
@@ -83,7 +86,7 @@ var Timer = function (typeOfTimer, enteredTimeInSeconds) {
 		return {
 			detail: {
 				type: typeOfTimer,
-				time: convertToString(that.timerValue),
+				time: that.timerValue,
 				deadline: (typeOfTimer === "ddln") ? 
 				that.deadline.fromDateToString() : convertToString(that.deadline)
 			}
