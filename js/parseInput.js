@@ -1,8 +1,7 @@
 module.exports = function (timeString) {
-    var $inputTime = document.querySelector("input#time");
     if (!timeString) {
-        timeString = ($inputTime.value
-            ? $inputTime.value : 0);
+        var $inputTime = document.querySelector("input#time");
+        timeString = ($inputTime.value ? $inputTime.value : 0);
     }
     var result = {
         value: NaN,
@@ -16,7 +15,7 @@ module.exports = function (timeString) {
                 return timeString[i] == item;
             })
             if (!isCharValid) {
-                $inputTime.value("ЧЧ:ММ:СС'");
+                $inputTime.value = "ЧЧ:ММ:СС";
                 return result
             }
             if (timeString[i] !== ":") {
@@ -27,17 +26,17 @@ module.exports = function (timeString) {
 
     var hours = Math.floor(timeNumber / 10000);
     if (hours > 23) {
-        $inputTime.value("ЧЧ > 23");
+        $inputTime.value = "ЧЧ > 23";
         return result
     }
     var minutes = Math.floor((timeNumber - hours * 10000) / 100);
     if (minutes > 59) {
-        $inputTime.value("ММ > 59");
+        $inputTime.value = "ММ > 59";
         return result
     }
     var seconds = Math.floor(timeNumber - hours * 10000 - minutes * 100);
     if (seconds > 59) {
-        $inputTime.value("СС > 59");
+        $inputTime.value = "СС > 59";
         return result
     }
     var timeInSeconds = hours * 3600 + minutes * 60 + seconds;

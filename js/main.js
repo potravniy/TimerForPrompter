@@ -1,8 +1,8 @@
 window.onload = function () {
-    var Controller = require('./controller.js');
+    var TimerController = require('./controller.js');
+	var TimerView = require("./view.js");
     var PrompterWindowController = require("./prompterWindowCtrl.js");
-	var View = require("./view.js");
-    var Messenger = require("./messenger.js");
+    var MessengerControllerAndView = require("./messenger.js");
     require('./secondsEventEmitter.js');
 
     window.Tmr = {
@@ -39,8 +39,8 @@ window.onload = function () {
         }
     };
     
-	var timerController = new Controller();
-    var prompterWindowController = new PrompterWindowController();
-	var timerView = new View();
-    var messengerView = new Messenger();
+	new TimerController();
+	new TimerView();
+    new PrompterWindowController();
+    new MessengerControllerAndView();
 }

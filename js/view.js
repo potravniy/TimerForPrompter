@@ -22,7 +22,7 @@ var View = function () {
 				$inputTime.value = event.detail.deadline;   
 				break
 			case "down":
-				$inputTime.value = toStr(event.detail.time);
+				$inputTime.value = event.detail.time;
 				break
 		}
 	}
@@ -46,12 +46,12 @@ var View = function () {
 	}
 	this._showTime = function(event){
 		if (window.Tmr.state._prompterSt === "prompter-on") {
-			var format = fontFormat(event);
-            $timeOnPrompter.style.fontSize = format.size;
+			var font = fontFormat(event);
+            $timeOnPrompter.style.fontSize = font.size;
 			$timeOnPrompter.style.color
-				= $timeOnMain.style.color = format.color;
+				= $timeOnMain.style.color = font.color;
 			$timeOnPrompter.textContent
-				= $timeOnMain.textContent = format.time;
+				= $timeOnMain.textContent = event.detail.time;
 		}
 		else {
 	    	that.emit("openPrompterWindow");
