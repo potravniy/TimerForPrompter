@@ -1,5 +1,5 @@
 # TimerForPrompter
-Redesigned timer for TV studio prompter.
+Timer for TV studio prompter.
 
 Программа предназначена для вывода информации на дисплей суфлера телестудии.
 Выводимая информация включает в себя показания таймера и текстовое сообщение на две строки.
